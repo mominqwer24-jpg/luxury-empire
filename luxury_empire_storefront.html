@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LUXURY EMPIRE | Premium Shopping</title>
+<style>
+:root{--bg:#090a0c;--panel:#14161a;--silver:#d9dde4;--muted:#969da8;--line:#30343b}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:#f5f6f8;font-family:Arial,Helvetica,sans-serif}
+header{position:sticky;top:0;z-index:5;background:#090a0cf2;border-bottom:1px solid var(--line);padding:15px 5%;display:flex;align-items:center;justify-content:space-between;gap:12px}
+.brand{font-size:20px;letter-spacing:2px;font-weight:800;color:var(--silver)}.brand small{display:block;font-size:9px;letter-spacing:4px;color:var(--muted);margin-top:4px}
+button{cursor:pointer;border:0}.cart-btn,.main-btn{background:var(--silver);color:#101114;padding:11px 16px;border-radius:3px;font-weight:700}
+.hero{padding:65px 6% 55px;text-align:center;background:radial-gradient(ellipse at 50% 0%,#333943 0%,#15181d 42%,#090a0c 78%)}
+.eyebrow{color:#bfc5ce;letter-spacing:5px;font-size:11px}.hero h1{font-size:clamp(34px,8vw,68px);letter-spacing:4px;margin:17px 0 10px}.hero p{color:#b5bbc5;line-height:1.6}.hero .main-btn{margin-top:15px}
+.wrap{padding:28px 5%;max-width:1200px;margin:auto}.toolbar{display:flex;gap:10px;flex-wrap:wrap;align-items:center;justify-content:space-between;margin-bottom:22px}
+input,select{background:#171a20;color:#fff;border:1px solid var(--line);padding:12px;border-radius:3px;min-width:0}#search{flex:1;min-width:170px}
+.filters{display:flex;gap:8px;flex-wrap:wrap;margin:0 0 22px}.filter{background:#171a20;color:#cbd0d8;border:1px solid var(--line);padding:9px 13px;border-radius:3px}.filter.active{background:#d9dde4;color:#101114}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:13px}
+.product{background:var(--panel);border:1px solid #252930;padding:10px}.product img{width:100%;aspect-ratio:4/4.6;object-fit:cover;background:#222}.product h3{font-size:14px;margin:12px 0 5px}.product p{margin:0 0 12px;color:#bfc5ce;font-size:13px}.product .price{color:#fff;font-weight:700}.product button{width:100%;margin-top:10px;background:#d9dde4;color:#101114;padding:10px;font-weight:700}
+.section-title{font-size:22px;letter-spacing:2px;margin:0 0 8px}.sub{color:var(--muted);font-size:13px;margin:0 0 20px}
+footer{text-align:center;border-top:1px solid var(--line);padding:28px 15px;color:#8e95a0;font-size:12px;line-height:1.8;margin-top:40px}
+.overlay{display:none;position:fixed;inset:0;background:#000b;z-index:10;justify-content:center;align-items:center;padding:15px}.modal{background:#15181d;border:1px solid #454b55;width:min(440px,100%);padding:20px;max-height:85vh;overflow:auto}.modal-head{display:flex;justify-content:space-between;align-items:center}.close{background:transparent;color:#fff;font-size:24px}.cart-line{display:flex;justify-content:space-between;gap:10px;border-bottom:1px solid var(--line);padding:12px 0;font-size:14px}.qty button{background:#303640;color:#fff;padding:5px 9px;margin:0 3px}.total{display:flex;justify-content:space-between;font-weight:bold;padding:16px 0}.wide{width:100%;padding:13px;background:#d9dde4;color:#101114;font-weight:bold;margin-top:8px}
+.notice{color:#aeb5c0;font-size:12px;line-height:1.6;background:#20242b;padding:12px;margin-top:12px}
+@media(min-width:700px){.grid{grid-template-columns:repeat(4,minmax(0,1fr));gap:18px}.hero{padding:95px 6%}.product{padding:13px}}
+</style>
+</head>
+<body>
+<header>
+  <div class="brand">LUXURY EMPIRE<small>THE WORLD OF LUXURY</small></div>
+  <button class="cart-btn" onclick="openCart()">CART (<span id="cartCount">0</span>)</button>
+</header>
+<section class="hero">
+  <div class="eyebrow">DISCOVER THE EXCEPTIONAL</div>
+  <h1>LUXURY EMPIRE</h1>
+  <p>Premium fashion. Timeless style.<br>Make every moment extraordinary.</p>
+  <button class="main-btn" onclick="document.getElementById('shop').scrollIntoView({behavior:'smooth'})">SHOP COLLECTION</button>
+</section>
+<main class="wrap" id="shop">
+  <h2 class="section-title">OUR COLLECTION</h2>
+  <p class="sub">Explore a curated selection of premium essentials.</p>
+  <div class="toolbar">
+    <input id="search" type="search" placeholder="Search products..." oninput="renderProducts()">
+    <select id="sort" onchange="renderProducts()"><option value="default">Sort: Featured</option><option value="low">Price: Low to High</option><option value="high">Price: High to Low</option></select>
+  </div>
+  <div class="filters">
+    <button class="filter active" onclick="setCategory('All',this)">All</button>
+    <button class="filter" onclick="setCategory('Clothing',this)">Clothing</button>
+    <button class="filter" onclick="setCategory('Shoes',this)">Shoes</button>
+    <button class="filter" onclick="setCategory('Watches',this)">Watches</button>
+    <button class="filter" onclick="setCategory('Bags',this)">Bags</button>
+  </div>
+  <div class="grid" id="products"></div>
+</main>
+<footer>
+  <strong style="color:#d9dde4;letter-spacing:3px">LUXURY EMPIRE</strong><br>
+  Premium Shopping Experience<br>
+  Demo storefront • Replace sample products and prices before launch
+</footer>
+
+<div class="overlay" id="cartOverlay" onclick="if(event.target===this)closeCart()">
+  <div class="modal">
+    <div class="modal-head"><h2>Your Cart</h2><button class="close" onclick="closeCart()">×</button></div>
+    <div id="cartItems"></div>
+    <div class="total"><span>Total</span><span id="cartTotal">₹0</span></div>
+    <button class="wide" onclick="checkout()">CONTINUE TO CHECKOUT</button>
+    <div class="notice">This is the first visual/storefront version. Online payment is not connected yet. A secure payment gateway must be connected through a verified merchant account and server-side integration before accepting payments.</div>
+  </div>
+</div>
+<script>
+const products=[
+{id:1,name:"Signature Black Jacket",cat:"Clothing",price:3499,img:"https://images.unsplash.com/photo-1551028719-00167b16eac5?w=700"},
+{id:2,name:"Classic White Sneakers",cat:"Shoes",price:2799,img:"https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=700"},
+{id:3,name:"Silver Chronograph",cat:"Watches",price:5999,img:"https://images.unsplash.com/photo-1524805444758-089113d48a6d?w=700"},
+{id:4,name:"Premium Leather Bag",cat:"Bags",price:4299,img:"https://images.unsplash.com/photo-1584917865442-de89df76afd3?w=700"},
+{id:5,name:"Minimal Black Shirt",cat:"Clothing",price:1899,img:"https://images.unsplash.com/photo-1596755389378-c31d21fd1273?w=700"},
+{id:6,name:"Urban Luxury Sneakers",cat:"Shoes",price:3199,img:"https://images.unsplash.com/photo-149 footwear?w=700"},
+{id:7,name:"Midnight Classic Watch",cat:"Watches",price:4899,img:"https://images.unsplash.com/photo-1523170335258-f5ed11844a49?w=700"},
+{id:8,name:"Everyday Tote Bag",cat:"Bags",price:2499,img:"https://images.unsplash.com/photo-1590874103328-eac38a683ce7?w=700"}
+];
+let category="All",cart={};
+function money(n){return "₹"+n.toLocaleString("en-IN")}
+function setCategory(c,el){category=c;document.querySelectorAll(".filter").forEach(b=>b.classList.remove("active"));el.classList.add("active");renderProducts()}
+function renderProducts(){
+ let q=document.getElementById("search").value.toLowerCase(),sort=document.getElementById("sort").value;
+ let list=products.filter(p=>(category==="All"||p.cat===category)&&(p.name.toLowerCase().includes(q)||p.cat.toLowerCase().includes(q)));
+ if(sort==="low")list.sort((a,b)=>a.price-b.price);if(sort==="high")list.sort((a,b)=>b.price-a.price);
+ document.getElementById("products").innerHTML=list.map(p=>`<article class="product"><img src="${p.img}" alt="${p.name}" onerror="this.src='https://placehold.co/600x700/20242b/d9dde4?text=LUXURY+EMPIRE'"><h3>${p.name}</h3><p>${p.cat}</p><div class="price">${money(p.price)}</div><button onclick="addToCart(${p.id})">ADD TO CART</button></article>`).join("")||"<p>No products found.</p>";
+}
+function addToCart(id){cart[id]=(cart[id]||0)+1;updateCart()}
+function updateCart(){let count=Object.values(cart).reduce((a,b)=>a+b,0);document.getElementById("cartCount").textContent=count}
+function openCart(){drawCart();document.getElementById("cartOverlay").style.display="flex"}
+function closeCart(){document.getElementById("cartOverlay").style.display="none"}
+function drawCart(){
+ let entries=Object.entries(cart).filter(([id,q])=>q>0),total=0;
+ document.getElementById("cartItems").innerHTML=entries.map(([id,q])=>{let p=products.find(x=>x.id==id);total+=p.price*q;return `<div class="cart-line"><div>${p.name}<br>${money(p.price)} × ${q}</div><div class="qty"><button onclick="changeQty(${id},-1)">−</button>${q}<button onclick="changeQty(${id},1)">+</button></div></div>`}).join("")||"<p>Your cart is empty.</p>";
+ document.getElementById("cartTotal").textContent=money(total);
+}
+function changeQty(id,n){cart[id]=(cart[id]||0)+n;if(cart[id]<=0)delete cart[id];updateCart();drawCart()}
+function checkout(){alert("Checkout and online payment are not connected yet. We will connect a secure payment gateway after the store, merchant account and backend are set up.");}
+renderProducts();
+</script>
+</body>
+</html>
